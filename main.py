@@ -9,7 +9,8 @@ from dao.orm.entities import *
 import numpy as np
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from sqlalchemy.sql.expression import func
-
+from pearson import *
+from classification import *
 
 app = Flask(__name__)
 app.secret_key = 'development key'
@@ -19,14 +20,48 @@ bootstrap = Bootstrap(app)
 
 @app.route('/')
 def index():
+    user_obj = {}
     allUsers = db.sqlalchemy_session.query(User).all()
     current_user = session.get('username')
+    admin = False
+    current_user = session.get('username')
+    if (current_user == 'admin'):
+        admin = True
     for user in allUsers:
         if (user.Username == current_user):
             user_obj = user
-            return render_template('index.html', current_user = current_user, user_obj = user_obj)
-    return render_template('index.html', current_user = current_user)
+    return render_template('index.html', current_user = current_user, user_obj = user_obj, admin = admin)
 
+@app.route('/all_users', methods = ['GET', 'POST'])
+def all_users():
+    allUsers = db.sqlalchemy_session.query(User).all()
+    current_user = session.get('username')
+    if (current_user == 'admin'):
+        admin = True
+    return render_template('all_users.html', allUsers=allUsers, current_user = current_user, admin = admin)
+@app.route('/all_messages_admin', methods = ['GET', 'POST'])
+def all_messages_admin():
+    allMessages = db.sqlalchemy_session.query(Message).all()
+    current_user = session.get('username')
+    if (current_user == 'admin'):
+        admin = True
+    return render_template('all_mesages_admin.html', allMessages=allMessages, current_user = current_user, admin = admin)
+@app.route('/delete_message')
+def delete_message():
+    id = request.args.get('name')
+    message = db.sqlalchemy_session.query(User).filter(Message.MessageID == id).first()
+    db.sqlalchemy_session.delete(message)
+    db.sqlalchemy_session.commit()
+
+    return redirect(url_for('all_messages_admin'))
+@app.route('/delete_user')
+def delete_user():
+    username = request.args.get('name')
+    user = db.sqlalchemy_session.query(User).filter(User.Username == username).first()
+    db.sqlalchemy_session.delete(user)
+    db.sqlalchemy_session.commit()
+
+    return redirect(url_for('all_users'))
 @app.route('/signup', methods = ['GET', 'POST'])
 def signup():
     error = "whhat"
@@ -166,37 +201,29 @@ def edit_user():
             db.sqlalchemy_session.commit()
 
             return redirect(url_for('index_user'))
-    
-@app.route('/delete_user')
-def delete_user():
-    allUsers = db.sqlalchemy_session.query(User).all()
-
-    name = request.args.get('name')
-    thisUser = db.sqlalchemy_session.query(User).filter(User.Username == name).first()
-   
-    db.sqlalchemy_session.delete(thisUser)
-    db.sqlalchemy_session.commit()
-
-    return redirect(url_for('index_user'))
-
-
 
 @app.route('/messages_department', methods = ['GET'])
 def messages_department():
     allUsers = db.sqlalchemy_session.query(User).all()
     allMesages = db.sqlalchemy_session.query(Message).all()
     current_user = session.get('username')
+
     user_array = []
     messages_array = []
-
+    user_department_array=[]
     for user in allUsers:
         if (user.Username == current_user):
             user_obj = user
+    needed_department = user_obj.Department
+    print('dep', needed_department)
     for user in allUsers:
          if(user.Company == user_obj.Company):
              user_array.append(user)
+    for user in user_array:
+        if(user.Department == needed_department):
+            user_department_array.append(user)
     for message in allMesages:
-        for i in ((user_array)):
+        for i in ((user_department_array)):
             if(message.MessageSender == i.Username):
                 messages_array.append(message)
 
@@ -288,20 +315,6 @@ def edit_message():
 
             return redirect(url_for('index_message'))
    
-@app.route('/delete_message')
-def delete_message():
-    allMesages = db.sqlalchemy_session.query(User).all()
-
-    message_id = request.args.get('name')
-    thisMessage = db.sqlalchemy_session.query(Message).filter(Message.MessageID == message_id).one()
-
-    db.sqlalchemy_session.delete(thisMessage)
-    db.sqlalchemy_session.commit()
-
-    return redirect(url_for('index_message'))
-
-
-
 
 
 @app.route('/company', methods = ['GET'])
@@ -353,7 +366,45 @@ def edit_company():
             db.sqlalchemy_session.commit()
 
             return redirect(url_for('index_company'))
+@app.route('/predict', methods = ['GET', 'POST'])
+def predict():
+    array_departs = []
+    x  = []
+    age = request.args.get('age')
+    depart = request.args.get('depart')
+    allDepartments = db.sqlalchemy_session.query(Department).all()
+    for dep in allDepartments:
+        array_departs.append(dep.Department)
+    index = array_departs.index(depart)
+    x.append(int(age))
+    x.append(index)
+    print('x', x)
+    result_pnn = output(x)
+    return render_template('statistics.html', result_pnn=result_pnn, allDepartments  = allDepartments)
 
+@app.route('/statistics', methods = ['GET', 'POST'])
+def statistics():
+    allUsers = db.sqlalchemy_session.query(User).all()
+    allDepartments = db.sqlalchemy_session.query(Department).all()
+
+    lenOfName = []
+    lenofPass = []
+    mean = ''
+    for user in allUsers:
+        lenOfName.append(len(user.Username))
+        lenofPass.append(len(user.Password))
+    corellation_number = pearson(lenOfName, lenofPass)
+    if (corellation_number>0.9 and corellation_number<1):
+        mean = 'Very high dependence'
+    if (corellation_number>0.7 and corellation_number<0.9):
+        mean = 'High dependence'
+    if (corellation_number>0.5 and corellation_number<0.7):
+        mean = 'Medium dependence'
+    if (corellation_number ==1 ):
+        mean = '100% dependence'
+    current_user = session.get('username')
+    width = corellation_number*100
+    return render_template('statistics.html', allDepartments=allDepartments, width=width, corellation_number = corellation_number, mean = mean, allUsers=allUsers, current_user = current_user)
 @app.route('/delete_company')
 def delete_company():
     allCompanies = db.sqlalchemy_session.query(Company).all()
