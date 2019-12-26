@@ -1,0 +1,37 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col"> Sender </th>
+            <th scope="col"> Reciever </th>
+            <th scope="col"> Content </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for message in allMessages%}
+            {% if message.username!='admin'%}
+                <tr>
+                    <td> {{message.MessageSender}}</td>
+                    <td> {{message.MessageReciever}}</td>
+                    <td> {{message.MessageContent}}</td>
+                    <td>
+                        <a href="/delete_message?name={{message.MessageID}}"
+                           title="delete button">
+                            <button type="button" class="btn btn-danger" name="btn_delete_user"
+                                    data-user_id="{{message.MessageID}}">Delete
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+            {%endif%}
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

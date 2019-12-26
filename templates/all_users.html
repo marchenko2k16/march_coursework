@@ -1,0 +1,37 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col"> Username </th>
+            <th scope="col"> Company </th>
+            <th scope="col"> Department </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in allUsers%}
+            {% if user.Username!='admin'%}
+                <tr>
+                    <td> {{user.Username}}</td>
+                    <td> {{user.Company}}</td>
+                    <td> {{user.Department}}</td>
+                    <td>
+                        <a href="/delete_user?name={{user.Username}}"
+                           title="delete button">
+                            <button type="button" class="btn btn-danger" name="btn_delete_user"
+                                    data-user_id="{{user.username}}">Delete
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+            {%endif%}
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

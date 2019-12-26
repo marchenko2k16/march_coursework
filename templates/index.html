@@ -20,9 +20,14 @@
             <a class="nav-link fontmy" href="{{ url_for('signup') }}">SIGN UP</a>
         {% else %}
             <a class="nav-link fontmy" href = "\"> {{current_user}}'MESSENGER </a>
-<!--            <a class="nav-link fontmy" href="{{ url_for('index') }}">  {{current_user}} </a>-->
-            <a class="nav-link fontmy" href="{{ url_for('logout') }}">Log Out</a>
+                    <a class="nav-link fontmy" href = "\statistics"> Total statistics </a>
 
+            <a class="nav-link fontmy" href="{{ url_for('logout') }}">Log Out</a>
+            {% if admin %}
+                <a class="nav-link fontmy" href="{{ url_for('all_users') }}">All Users</a>
+                <a class="nav-link fontmy" href="{{ url_for('all_messages_admin') }}">All messages</a>
+
+            {% endif %}
         {% endif %}
     </div>
 
@@ -42,9 +47,7 @@
             <nav class="navbar navbar-light bg-light">
               <span class="navbar-brand mb-0 h1">Personal chat</span>
             </nav>
-            {% if admin %}:
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('all_users') }}">All Users</a></li>
-            {% endif %}
+
         {% endif %}
 
 
