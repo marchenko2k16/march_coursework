@@ -1,0 +1,45 @@
+{% extends "index.html" %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Site</th>
+            <th scope="col">Version</th>
+            <th scope="col">Country</th>
+            <th scope="col">Price</th>
+            <th scope="col">Username</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for data_sample in messengers_data%}
+        <tr>
+            <td> {{data_sample.Site}}</td>
+            <td> {{data_sample.Version}}</td>
+            <td> {{data_sample.Country}}</td>
+            <td> {{data_sample.Price}}</td>
+            <td> {{data_sample.Username}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td>
+                <a href="/insert" title="new insertion button">
+                    <button type="button" class="btn btn-success" name="btn_new_message">Add messenger</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+</body>
+</html>

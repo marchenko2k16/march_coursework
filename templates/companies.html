@@ -1,0 +1,51 @@
+{% extends "index.html" %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Companies</title>
+</head>
+<body>
+{% block content %}
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Company name</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for company in allCompanies%}
+        <tr>
+            <td> {{company.Company}}</td>
+            <td>
+                <a href="/edit_company?name={{company.Company}}"
+                   title="edit button">
+                    <button type="button" class="btn btn-warning" name="btn_edit_company"
+                            data-user_id="{{company.Company}}">Edit
+                    </button>
+                </a>
+                <a href="/delete_company?name={{company.Company}}"
+                   title="delete button">
+                    <button type="button" class="btn btn-danger" name="btn_delete_company"
+                            data-user_id="{{company.Company}}">Delete
+                    </button>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td>
+                <a href="/new_company" title="new company button">
+                    <button type="button" class="btn btn-success" name="btn_new_company">New company</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+</body>
+</html>

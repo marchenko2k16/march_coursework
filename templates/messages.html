@@ -1,0 +1,60 @@
+{% extends "index.html" %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Department</th>
+            <th scope="col">Message content</th>
+            <th scope="col">Message sender</th>
+            <th scope="col">Message date</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for message in allMesages%}
+        <tr>
+             <td> {{user_obj.Department}}</td>
+            <td> {{message.MessageContent}}</td>
+            <td> {{message.MessageSender}}</td>
+            <td> {{message.MessageDate}}</td>
+            <td>
+                {% if (message.MessageSender == current_user) %}
+                    <a href="/edit_message?name={{message.MessageID}}"
+                       title="edit button">
+                        <button type="button" class="btn btn-warning" name="btn_edit_message"
+                                data-user_id="{{message.MessageID}}">Edit
+                        </button>
+                    </a>
+                    <a href="/delete_message?name={{message.MessageID}}"
+                       title="delete button">
+                        <button type="button" class="btn btn-danger" name="btn_delete_message"
+                                data-user_id="{{message.MessageID}}">Delete
+                        </button>
+                    </a>
+                {% endif %}
+            </td>
+        </tr>
+        {%endfor%}
+        <tr>
+            <td>
+                <a href="/new_message" title="new receipt button">
+                    <button type="button" class="btn btn-success" name="btn_new_message">New message</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+</body>
+</html>

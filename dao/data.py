@@ -1,0 +1,5 @@
+host = 'ec2-54-228-246-214.eu-west-1.compute.amazonaws.com'
+database = 'deucemuc8g1nvn'
+username = 'nntozibqjlxujv'
+password = '1b34c7bd06aa3066c5988cc8c8d04948c2dd75a05e54152d60e4ee7d7aefbfe7'
+DATABASE_URL = 'postgres://nntozibqjlxujv:1b34c7bd06aa3066c5988cc8c8d04948c2dd75a05e54152d60e4ee7d7aefbfe7@ec2-54-228-246-214.eu-west-1.compute.amazonaws.com:5432/deucemuc8g1nvn'

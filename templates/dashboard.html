@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+    {% for id in ids %}
+        <div id={{id}}></div>
+    {% endfor %}
+
+    <script src="{{ url_for('static', filename='js/d3.v5.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/plotly-latest.min.js') }}"></script>
+
+    <script type="text/javascript">
+      var graphs = {{graphJSON | safe}};
+        var ids = {{ids | safe}};
+        for(var i in graphs) {
+            Plotly.plot(ids[i].toString(), // the ID of the div, created above
+                        [graphs[i]],{});
+        }
+
+    </script>
+
+{% endblock %}
