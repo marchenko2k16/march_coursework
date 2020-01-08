@@ -31,6 +31,15 @@ def index():
         if (user.Username == current_user):
             user_obj = user
     return render_template('index.html', current_user = current_user, user_obj = user_obj, admin = admin)
+@app.route('/personal_messages', methods = ['GET', 'POST'])
+def personal_messages():
+    allUsers = db.sqlalchemy_session.query(User).all()
+    current_user = session.get('username')
+    if (current_user == 'admin'):
+        admin = True
+        return render_template('personal_messages.html', meow = 'mepw', allUsers=allUsers, current_user = current_user, admin = admin)
+    return render_template('personal_messages.html', allMessageallUserss=allUsers, current_user=current_user)
+
 
 @app.route('/all_users', methods = ['GET', 'POST'])
 def all_users():
@@ -368,6 +377,26 @@ def edit_company():
             return redirect(url_for('index_company'))
 @app.route('/predict', methods = ['GET', 'POST'])
 def predict():
+    allUsers = db.sqlalchemy_session.query(User).all()
+    allDepartments = db.sqlalchemy_session.query(Department).all()
+
+    lenOfName = []
+    lenofPass = []
+    mean = ''
+    for user in allUsers:
+        lenOfName.append(len(user.Username))
+        lenofPass.append(len(user.Password))
+    corellation_number = pearson(lenOfName, lenofPass)
+    if (corellation_number > 0.9 and corellation_number < 1):
+        mean = 'Very high dependence'
+    if (corellation_number > 0.7 and corellation_number < 0.9):
+        mean = 'High dependence'
+    if (corellation_number > 0.5 and corellation_number < 0.7):
+        mean = 'Medium dependence'
+    if (corellation_number == 1):
+        mean = '100% dependence'
+    current_user = session.get('username')
+    width = corellation_number * 100
     array_departs = []
     x  = []
     age = request.args.get('age')
@@ -380,7 +409,7 @@ def predict():
     x.append(index)
     print('x', x)
     result_pnn = output(x)
-    return render_template('statistics.html', result_pnn=result_pnn, allDepartments  = allDepartments)
+    return render_template('statistics.html', result_pnn=result_pnn, width=width, allDepartments  = allDepartments, corellation_number = corellation_number, current_user = current_user)
 
 @app.route('/statistics', methods = ['GET', 'POST'])
 def statistics():

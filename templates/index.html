@@ -20,7 +20,7 @@
             <a class="nav-link fontmy" href="{{ url_for('signup') }}">SIGN UP</a>
         {% else %}
             <a class="nav-link fontmy" href = "\"> {{current_user}}'MESSENGER </a>
-                    <a class="nav-link fontmy" href = "\statistics"> Total statistics </a>
+                    <a class="nav-link fontmy" href = "\statistics"> Additional information </a>
 
             <a class="nav-link fontmy" href="{{ url_for('logout') }}">Log Out</a>
             {% if admin %}
@@ -44,9 +44,7 @@
             <nav class="navbar navbar-light bg-light">
                 <a class="navbar-brand" href="/messages">Common chat in {{user_obj.Company }} company</a>
             </nav>
-            <nav class="navbar navbar-light bg-light">
-              <span class="navbar-brand mb-0 h1">Personal chat</span>
-            </nav>
+          
 
         {% endif %}
 

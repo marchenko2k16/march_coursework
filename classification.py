@@ -27,7 +27,12 @@ for i in range(len(x)):
         x[i] = [(uniform(18, 100)), (uniform(0, 10)),]
 length = len(x)
 for i in range(length):
-    y.append((uniform(300, 2000)))
+    if x[i][0]<22:
+        y.append((uniform(300, 600)))
+    if x[i][0] > 22 and x[i][0]<28:
+        y.append((uniform(500, 700)))
+    if x[i][0]>28:
+        y.append((uniform(700, 2000)))
 
 output = PNN(x, y)
 

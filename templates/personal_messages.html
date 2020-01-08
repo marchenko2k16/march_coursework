@@ -12,20 +12,17 @@
     <table class="table">
         <thead>
         <tr>
-            <th scope="col">Department</th>
-            <th scope="col">Message content</th>
-            <th scope="col">Message sender</th>
+            <th scope="col">Userename</th>
             <th scope="col">Message date</th>
 
         </tr>
         </thead>
         <tbody>
-        {% for message in allMesages%}
+        {% for user in allUsers%}
         <tr>
-             <td> {{user_obj.Department}}</td>
-            <td> {{message.MessageContent}}</td>
-            <td> {{message.MessageSender}}</td>
-            <td> {{message.MessageDate}}</td>
+<!--             <td> {{user_obj.Department}}</td>-->
+            <td> {{user.username}}</td>
+            <td> {{meow}}</td>
             <td>
                 {% if (current_user=='admin') %}
                     <a href="/edit_message?name={{message.MessageID}}"
