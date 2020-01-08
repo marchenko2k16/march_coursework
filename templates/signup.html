@@ -19,7 +19,17 @@ Sign Up
     {{ wtf.form_field(form.Username) }}
     {{ wtf.form_field(form.Password) }}
     {{ wtf.form_field(form.Company) }}
+    <h5>Avaialable companies:
+      {% for company in allCompanies%}
+      <span> {{ company.Company }}, </span>
+      {% endfor %}
+    </h5>
     {{ wtf.form_field(form.Department) }}
+    <h5>Avaialable departments:
+      {% for department in allDepartments%}
+      <span> {{ department.Department }}, </span>
+      {% endfor %}
+    </h5>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
     {% if error%}
       <h1>{{error}} </h1>

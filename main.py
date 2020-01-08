@@ -73,6 +73,9 @@ def delete_user():
     return redirect(url_for('all_users'))
 @app.route('/signup', methods = ['GET', 'POST'])
 def signup():
+    db = PostgresDb()
+    allCompanies = db.sqlalchemy_session.query(Company)
+    allDepartments = db.sqlalchemy_session.query(Department)
     error = "whhat"
     error_username = 'YOU CANT DUBLICATE USERNAMES.' \
             ' TRY ANOTHER USERNAME'
@@ -109,8 +112,8 @@ def signup():
         for user in allUsers:
             if (user.Username == current_user):
                 user_obj = user
-        return render_template('index.html', current_user = current_user, user_obj = user_obj)
-    return render_template('signup.html', form = form)
+        return render_template('index.html', current_user = current_user, user_obj = user_obj, allCompanies = allCompanies, allDepartments = allDepartments)
+    return render_template('signup.html', form = form, allCompanies = allCompanies, allDepartments = allDepartments)
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     form = LoginForm()

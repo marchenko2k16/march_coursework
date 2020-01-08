@@ -36,7 +36,7 @@
 {% block content %}
     <ul class="navbar-nav">
         {% if current_user == None %}:
-        <p> YOU HAVE TO BE AUTHORIZED TO HAVE ACCESS TO CHATS</p>
+        <h3 style = "text-align:center; color:#014c8c"> YOU HAVE TO BE AUTHORIZED TO HAVE ACCESS TO CHATS</h3>
         {% else%}:
             <nav class="navbar navbar-light bg-light">
               <a class="navbar-brand" href="/messages_department">{{user_obj.Department}}'s chat in {{user_obj.Company }} company</a>
@@ -44,7 +44,7 @@
             <nav class="navbar navbar-light bg-light">
                 <a class="navbar-brand" href="/messages">Common chat in {{user_obj.Company }} company</a>
             </nav>
-          
+
 
         {% endif %}
 
